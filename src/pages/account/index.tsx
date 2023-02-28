@@ -6,6 +6,7 @@ import { DeleteFilled } from '@/icons/DeleteFilled'
 import { Account } from '@/types'
 import { createSignal, onMount } from 'solid-js'
 import { invoke } from '@tauri-apps/api/tauri';
+import { tauri } from '@tauri-apps/api'
 
 function AccountManage() {
   const [errMsg, setErrMsg] = createSignal<string | null>(null)
@@ -51,7 +52,9 @@ function AccountManage() {
     if (errors.length) {
       setErrMsg((msg) => (msg = errors.join('\n')))
     } else {
-      await invoke('save_accounts', { data: accounts })
+      if (await invoke('save_accounts', { accounts: accounts() })) {
+        // 保存成功
+      }
     }
   }
 
@@ -81,6 +84,7 @@ function AccountManage() {
                 value={account.phone}
                 label="手机号"
                 required
+                tabIndex={1}
                 maxLength={11}
                 name={`${index}.phone`}
                 placeholder="请输入手机号"
@@ -89,6 +93,7 @@ function AccountManage() {
               <Input
                 value={account.remark}
                 label="备注"
+                tabIndex={1}
                 name={`${index}.remark`}
                 maxLength={10}
                 placeholder="请输入账号备注"

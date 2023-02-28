@@ -10,16 +10,20 @@ fn greet(name: &str) -> String {
 }
 
 mod storage;
-use storage::Account;
+use storage::{Account,Storage};
+use once_cell::sync::Lazy;
+
+static STORAGE: Lazy<Storage> = Lazy::new(|| Storage::new());
 
 #[tauri::command]
 fn get_accounts() -> Vec<Account> {
-    storage::get_accounts()
+    STORAGE.get_accounts()
 }
 
+
 #[tauri::command]
-fn save_accounts(data: Vec<Account>) -> bool {
-    storage::save_accounts(data)
+fn save_accounts(accounts: Vec<Account>) -> bool {
+    STORAGE.save_accounts(accounts)
 }
 
 fn main() {
