@@ -25,12 +25,12 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
-    rollupOptions: {
-      input: {
-        main: fileURLToPath(new URL("account.html", import.meta.url)),
-        nested: fileURLToPath(new URL("jd.html", import.meta.url)),
-      },
-    },
+    // rollupOptions: {
+    //   input: {
+    //     main: fileURLToPath(new URL("account.html", import.meta.url)),
+    //     nested: fileURLToPath(new URL("jd.html", import.meta.url)),
+    //   },
+    // },
   },
   resolve: {
     alias: {

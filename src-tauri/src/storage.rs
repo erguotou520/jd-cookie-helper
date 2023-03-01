@@ -5,7 +5,7 @@ use serde_json::json;
 use std::path::{Path};
 use dirs;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Account {
   pub phone: String,
   pub remark: String

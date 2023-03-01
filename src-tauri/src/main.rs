@@ -3,15 +3,12 @@
     windows_subsystem = "windows"
 )]
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 mod storage;
-use storage::{Account,Storage};
+use std::fmt::format;
+
 use once_cell::sync::Lazy;
+use storage::{Account, Storage};
+use tauri::{Manager, Size, LogicalSize, Position, LogicalPosition};
 
 static STORAGE: Lazy<Storage> = Lazy::new(|| Storage::new());
 
@@ -20,15 +17,59 @@ fn get_accounts() -> Vec<Account> {
     STORAGE.get_accounts()
 }
 
-
 #[tauri::command]
 fn save_accounts(accounts: Vec<Account>) -> bool {
     STORAGE.save_accounts(accounts)
 }
 
 fn main() {
+    let accounts = get_accounts();
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, get_accounts, save_accounts])
+        .setup(|app| {
+            if accounts.len() != 0 {
+                app.get_window("main").unwrap().close().unwrap();
+                let handle = app.handle();
+                for account in accounts {
+                    let h = handle.clone();
+                    std::thread::spawn(move || {
+                        let phone = account.phone.clone();
+                        let mut title = account.remark;
+                        if title.is_empty() {
+                            title = account.phone;
+                        }
+                        let jd = tauri::WindowBuilder::new(
+                            &h,
+                            "jd",
+                            tauri::WindowUrl::External(
+                                "https://plogin.m.jd.com/login/login".parse().unwrap(),
+                            ),
+                        )
+                        .build()                        
+                        .unwrap();
+                        jd.set_title(title.as_str()).unwrap();
+                        jd.set_size(Size::Logical(LogicalSize { width: 375.0, height: 667.0 })).unwrap();
+                        let script = format!(r#"setTimeout(function() {{
+                            console.log('111')
+                            var evt1 = new Event('input', {{
+                                'bubbles': true,
+                                'cancelable': true
+                            }})
+                            var ie=document.querySelector('.acc-input.mobile')
+                            ie.value = '{}'
+                            ie.dispatchEvent(evt1)
+                            var evt2 = document.createEvent("HTMLEvents")
+                            evt2.initEvent(\"change\", false, true)
+                            var ce = document.querySelector('.policy_tip-checkbox')
+                            ce.dispatchEvent(evt2)
+                            document.querySelector('.getMsg-btn').click()
+                        }}, 1000)"#, phone);
+                        jd.eval(&script).unwrap();
+                    });
+                }
+            }
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![get_accounts, save_accounts])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

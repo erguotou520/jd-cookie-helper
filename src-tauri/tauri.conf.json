@@ -2,7 +2,7 @@
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420/account.html",
+    "devPath": "http://localhost:1420",
     "distDir": "../dist",
     "withGlobalTauri": true
   },
@@ -16,6 +16,9 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": true
       }
     },
     "bundle": {
@@ -63,7 +66,8 @@
         "height": 667,
         "resizable": true,
         "title": "jd-cookie-helper",
-        "width": 375
+        "width": 375,
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
       }
     ]
   }
