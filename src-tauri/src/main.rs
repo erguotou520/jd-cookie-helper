@@ -4,12 +4,12 @@
 )]
 
 mod storage;
-use std::fmt::format;
+
+use std::{thread, time::Duration};
 
 use once_cell::sync::Lazy;
 use storage::{Account, Storage};
-use tauri::{Manager, Size, LogicalSize, Position, LogicalPosition};
-
+use tauri::{Manager, Size, LogicalSize};
 static STORAGE: Lazy<Storage> = Lazy::new(|| Storage::new());
 
 #[tauri::command]
@@ -49,7 +49,7 @@ fn main() {
                         jd.set_title(title.as_str()).unwrap();
                         jd.set_size(Size::Logical(LogicalSize { width: 375.0, height: 667.0 })).unwrap();
                         let script = format!(r#"setTimeout(function() {{
-                            console.log('111')
+                            console.log('inject')
                             var evt1 = new Event('input', {{
                                 'bubbles': true,
                                 'cancelable': true
@@ -58,12 +58,18 @@ fn main() {
                             ie.value = '{}'
                             ie.dispatchEvent(evt1)
                             var evt2 = document.createEvent("HTMLEvents")
-                            evt2.initEvent(\"change\", false, true)
+                            evt2.initEvent("change", false, true)
                             var ce = document.querySelector('.policy_tip-checkbox')
+                            ce.checked = true
                             ce.dispatchEvent(evt2)
-                            document.querySelector('.getMsg-btn').click()
-                        }}, 1000)"#, phone);
+                            setTimeout(function() {{
+                                document.querySelector('.getMsg-btn').click()
+                            }}, 1000)
+                        }}, 1800)"#, phone);
+                        thread::sleep(Duration::from_secs(2));
+                        // println!("{}", script);
                         jd.eval(&script).unwrap();
+                        // TODO 后续没法监听到cookie
                     });
                 }
             }
