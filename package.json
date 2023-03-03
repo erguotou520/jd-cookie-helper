@@ -1,26 +1,28 @@
 {
   "name": "jd-cookie-helper",
-  "version": "0.0.0",
-  "description": "",
-  "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "tauri": "tauri"
-  },
+  "version": "0.0.1",
+  "description": "jJD cookie helper",
+  "main": "dist/electron/main.js",
+  "repository": "https://github.com/erguotou520/jd-cookie-helper",
+  "author": "erguotou525@gmail.com",
   "license": "MIT",
-  "devDependencies": {
-    "@tauri-apps/cli": "^1.2.2",
-    "@types/node": "^18.7.10",
-    "typescript": "^4.7.4",
-    "vite": "^4.0.0",
-    "vite-plugin-solid": "^2.3.0"
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder"
   },
-  "dependencies": {
-    "@tauri-apps/api": "^1.2.0",
-    "solid-js": "^1.4.7",
-    "vite-plugin-windicss": "^1.8.10",
-    "windicss": "^3.5.6"
-  }
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0",
+    "typescript": "^4.7.4",
+    "vite": "^3.1.0",
+    "vite-plugin-electron": "^0.9.2"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "electron",
+    "jd"
+  ]
 }

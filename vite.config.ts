@@ -1,40 +1,24 @@
-import { fileURLToPath } from "url";
-import { defineConfig } from "vite";
-import solidPlugin from "vite-plugin-solid";
-import WindiCSS from 'vite-plugin-windicss'
+import fs from 'fs'
+import { defineConfig } from 'vite'
+import electron from 'vite-plugin-electron'
 
+fs.rmSync('dist', { recursive: true, force: true }) // v14.14.0
 
 export default defineConfig({
-  plugins: [solidPlugin(),  WindiCSS(),],
-
-  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  // prevent vite from obscuring rust errors
-  clearScreen: false,
-  // tauri expects a fixed port, fail if that port is not available
-  server: {
-    port: 1420,
-    strictPort: true,
-  },
-  // to make use of `TAURI_DEBUG` and other env variables
-  // https://tauri.studio/v1/api/config#buildconfig.beforedevcommand
-  envPrefix: ["VITE_", "TAURI_"],
-  build: {
-    // Tauri supports es2021
-    target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
-    // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
-    // produce sourcemaps for debug builds
-    sourcemap: !!process.env.TAURI_DEBUG,
-    // rollupOptions: {
-    //   input: {
-    //     main: fileURLToPath(new URL("account.html", import.meta.url)),
-    //     nested: fileURLToPath(new URL("jd.html", import.meta.url)),
-    //   },
-    // },
-  },
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-    }
-  }
-});
+  plugins: [
+    electron({
+      main: {
+        entry: 'electron/main.ts',
+      },
+      // preload: {
+      //   input: {
+      //     // Must be use absolute path, this is the restrict of Rollup
+      //     preload: path.join(__dirname, 'electron/preload.ts'),
+      //   },
+      // },
+      // Enables use of Node.js API in the Renderer-process
+      // https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#electron-renderervite-serve
+      renderer: {},
+    }),
+  ],
+})
