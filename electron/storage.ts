@@ -12,7 +12,7 @@ if (!existsSync(storageDir)) {
 const accountsFile = join(storageDir, 'accounts.json')
 
 export function saveAccounts(accounts: Account[]) {
-  return writeFile(accountsFile, JSON.stringify(accounts), 'utf-8')
+  return writeFile(accountsFile, JSON.stringify(accounts), 'utf-8').then(() => true).catch(() => false)
 }
 
 export function readAccounts(): Promise<Account[]> {

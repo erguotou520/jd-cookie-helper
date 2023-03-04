@@ -1,0 +1,16 @@
+input:focus-within ~ label,
+input:not(:placeholder-shown) ~ label {
+  @apply transform scale-75 -translate-y-5 translate-x-0;
+}
+
+input:focus-within ~ label {
+  @apply text-emerald-500;
+}
+
+input:invalid:focus-within ~ label {
+  @apply text-pink-500;
+}
+
+input[readonly] {
+  @apply border-gray-300;
+}
