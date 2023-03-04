@@ -14,13 +14,13 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: 10
+          version: 7
     
       - name: Build
-        run: yarn install && npx tsc && npx vite build
+        run: pnpm install && npx tsc && npx vite build
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
