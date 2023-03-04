@@ -2,7 +2,8 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  "appId": "YourAppID",
+  "appId": "me.erguotou.jd-cookie-helper",
+  "build: "compression",
   "asar": true,
   "directories": {
     "output": "release/${version}"
@@ -11,12 +12,20 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "${productName}_${version}.${ext}",
+    "artifactName": "${productName}_${version}_${arch}.${ext}",
+    "icon": "build/icons/mac/icon.icns",
     "target": [
-      "dmg"
+      {
+        "target": "default",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
     ]
   },
   "win": {
+    "icon": "build/icons/win/icon.icns",
     "target": [
       {
         "target": "nsis",
@@ -25,12 +34,16 @@
         ]
       }
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    "artifactName": "${productName}_${version}_${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
+  },
+  "linux": {
+    "target": "AppImage",
+    "icon": "build/icons/png"
   }
 }

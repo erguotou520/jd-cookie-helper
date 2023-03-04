@@ -1,5 +1,8 @@
 import type { ipcRenderer } from 'electron'
 
-interface Window {
-  __ipc__: ipcRenderer
+declare global {
+  interface Window {
+    __ipc__: ipcRenderer
+    openGithubPage: () => void
+  }
 }

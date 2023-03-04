@@ -9,11 +9,13 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder"
+    "build": "tsc && vite build && electron-builder",
+    "icon": "electron-icon-builder --input=./build/jd.png --output=./build"
   },
   "devDependencies": {
     "electron": "^19.0.6",
     "electron-builder": "^23.1.0",
+    "electron-icon-builder": "^2.0.1",
     "typescript": "^4.7.4",
     "vite": "^3.1.0",
     "vite-plugin-electron": "^0.9.2",
