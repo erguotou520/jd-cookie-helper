@@ -11,8 +11,7 @@ process.env.DIST = join(__dirname, '..')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public')
 
 import { join } from 'path'
-import { readFileSync } from 'fs'
-import { app, BrowserWindow, BrowserWindowConstructorOptions, screen } from 'electron'
+import { app, BrowserWindow, BrowserWindowConstructorOptions, screen, clipboard, session } from 'electron'
 import { readAccounts } from './storage'
 
 let win: BrowserWindow | null
@@ -39,14 +38,9 @@ setTimeout(function() {{
   document.querySelector('.getMsg-btn').click()
 }}, 1000)`
 
-const resultScriptTpl = `if (window.confirm('点击确定复制cookie并关闭窗口，取消仅复制')) {
-  navigator.clipboard.writeText('$$1')
-  window.close()
-} else {
-  navigator.clipboard.writeText('$$1')
-}`
+const resultScriptTpl = `window.confirm('点击确定复制cookie并关闭窗口，取消仅复制')`
 
-function createWindow(position?: [number, number]): BrowserWindow {
+function createWindow(key?: string, position?: [number, number]): BrowserWindow {
   const winOpt: BrowserWindowConstructorOptions = {
     icon: join(process.env.PUBLIC, 'logo.svg'),
     webPreferences: {
@@ -57,9 +51,12 @@ function createWindow(position?: [number, number]): BrowserWindow {
     width: 375,
     height: 667
   }
+  if (key) {
+    winOpt.webPreferences.session = session.fromPartition(key)
+  }
   if (position) {
-    winOpt.x = position[0]
-    winOpt.y = position[1]
+    winOpt.x = Math.round(position[0])
+    winOpt.y = Math.round(position[1])
   }
   win = new BrowserWindow(winOpt)
   win.webContents.setUserAgent('Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko; googleweblight) Chrome/38.0.1025.166 Mobile Safari/535.19')
@@ -77,12 +74,12 @@ function createWindow(position?: [number, number]): BrowserWindow {
   return win
 }
 
-function setupApp() {
+async function setupApp() {
   readAccounts().then(accounts => {
     if (accounts.length) {
       const { width, height } = screen.getPrimaryDisplay().workAreaSize
       for (const [index, account] of accounts.entries()) {
-        const win = createWindow([(index + 1) * width/(1+accounts.length) - 375/2, (height - 375)/2])
+        const win = createWindow(account.phone, [(index + 1) * width/(1+accounts.length) - 375/2, (height - 375)/2])
         win.loadURL('https://plogin.m.jd.com/login/login')
         win.setTitle(account.remark || account.phone)
         const cts = win.webContents
@@ -104,7 +101,18 @@ function setupApp() {
                       break
                     }
                   }
-                  cts.executeJavaScript(resultScriptTpl.replace('$$1', result.join(';') + ';'))
+                  if (result.length === 2) {
+                    const resultText = result.join(';') + ';'
+                    console.log(result, resultText)
+                    cts.executeJavaScript(resultScriptTpl).then(ret => {
+                      clipboard.writeText(resultText)
+                      if (ret) {
+                        win.close()
+                      }
+                    })
+                  } else {
+                    win.reload()
+                  }
                 })
               }
             })
