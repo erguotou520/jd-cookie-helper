@@ -3,7 +3,7 @@
  */
 {
   "appId": "me.erguotou.jd-cookie-helper",
-  "build": "compression",
+  "compression": "maximum",
   "asar": true,
   "directories": {
     "output": "release/${version}"
