@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder",
+    "compile": "tsc && vite build",
+    "build": "electron-builder",
     "icon": "electron-icon-builder --input=./build/jd.png --output=./build"
   },
   "devDependencies": {
