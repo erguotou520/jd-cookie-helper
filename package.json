@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
-    "icon": "electron-icon-builder --input=./build/jd.png --output=./build"
+    "icon": "electron-icon-builder --input=./build/jd.png --output=./build --publish=never"
   },
   "devDependencies": {
     "electron": "^19.0.6",

@@ -36,5 +36,3 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: "release/**"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
