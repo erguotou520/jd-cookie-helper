@@ -23,7 +23,7 @@ jobs:
           version: 7
     
       - name: Build
-        run: pnpm build
+        run: pnpm i && pnpm build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.0.0
