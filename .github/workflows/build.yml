@@ -37,4 +37,4 @@ jobs:
         with:
           files: "release/**"
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
