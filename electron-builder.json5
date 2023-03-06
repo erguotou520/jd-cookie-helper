@@ -24,6 +24,9 @@
       }
     ]
   },
+  // "dmg": {
+  //   "writeUpdateInfo": false
+  // },
   "win": {
     "icon": "build/icons/win/icon.ico",
     "target": [
@@ -41,6 +44,7 @@
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
+    // "differentialPackage": false
   },
   "linux": {
     "target": "AppImage",
