@@ -61,7 +61,7 @@ function createWindow(key?: string, position?: [number, number]): BrowserWindow 
     winOpt.y = Math.round(position[1])
   }
   win = new BrowserWindow(winOpt)
-  win.webContents.setUserAgent('Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko; googleweblight) Chrome/38.0.1025.166 Mobile Safari/535.19')
+  win.webContents.setUserAgent('Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Mobile Safari/537.36')
 
   win.webContents.on('did-finish-load', () => {
     win.webContents.enableDeviceEmulation({
